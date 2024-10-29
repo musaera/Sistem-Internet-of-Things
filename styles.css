@@ -1,0 +1,83 @@
+/* Gaya umum untuk halaman */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f2f2f2;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    color: #333;
+  }
+  
+  .container {
+    background-image: url(https://img.freepik.com/free-vector/gradient-network-connection-background_23-2148902184.jpg) ;
+    padding: 20px 40px;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    width: 350px;
+  }
+  
+  h1.title {
+    color: #99eda5;
+    font-size: 1.8em;
+    margin: 0 0 20px;
+  }
+  
+  /* Gaya untuk bagian sensor */
+  .sensor {
+    background: #e8f4fc62;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 20px;
+  }
+  
+  .sensor p {
+    margin: 8px 0;
+    font-size: 1em;
+    color: white;
+  }
+  
+  #status {
+    color: red;
+    font-weight: bold;
+  }
+  
+  #status.connected {
+    color: green;
+  }
+  
+  /* Gaya untuk bagian kontrol LED */
+  .led {
+    text-align: center;
+    margin-top: 20px;
+  }
+  
+  .led h3 {
+    font-size: 1.4em;
+    color: #99eda5;
+    margin-bottom: 15px;
+  }
+  
+  .led button {
+    background-color: #117120;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    font-size: 1em;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin: 0 5px;
+    width: 100px;
+  }
+  
+  .led button:hover {
+    background-color: #63d975;
+  }
+  
+  .led button:active {
+    transform: scale(0.95);
+  }
+  

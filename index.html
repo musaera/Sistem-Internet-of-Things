@@ -5,90 +5,94 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SIoT</title>
     <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+    <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <h1 class="title" style="text-align: center">Sistem Internet of Things</h1>
+    <div class="container">
+      <h1 class="title">Sistem Internet of Things</h1>
 
-    <div class="sensor">
-      <p>Status: <b id="status" style="color: red">Terputus</b></p>
-      <p id="suhu">Suhu: - C</p>
-      <p id="kelembaban">Kelembaban: - %</p>
+      <div class="sensor">
+        <p>Status: <b id="status">Terputus</b></p>
+        <p id="suhu">Suhu: - °C</p>
+        <p id="kelembaban">Kelembaban: - %</p>
+      </div>
+
+      <div class="led">
+        <h3>Lampu</h3>
+        <button id="nyala">Nyala</button>
+        <button id="mati">Mati</button>
+      </div>
     </div>
 
-    <div class="led">
-      <h3>Lampu</h3>
-      <button id="nyala" style="border-radius: 5px">Nyala</button>
-      <button id="mati" style="border-radius: 5px">Mati</button>
-      
-      <script>
-        const clientId = "client-" + Math.random().toString(16).substr(2, 8);
-        const host = "wss://sfl-official.cloud.shiftr.io:443";
-        const options = {
-          keepalive: 60,
-          clientId,
-          username: "sfl-official",
-          password: "eDeHBopIdCqPWslY",
-          protocolId: "MQTT",
-          protocolVersion: 4,
-          clean: true,
-          reconnectPeriod: 1000,
-          connectTimeout: 30 * 1000,
-          will: {
-            topic: "WillMsg",
-            payload: "Connection Closed abnormally..!",
-            qos: 0,
-            retain: false,
-          },
-          rejectUnauthorized: false,
-        };
-      
-        // Menghubungkan ke MQTT Broker
-        console.log("Connecting to MQTT client");
-        const client = mqtt.connect(host, options);
-      
-        client.on("error", (err) => {
-          console.log("Connection error: ", err);
-          client.end();
-        });
-      
-        client.on("connect", () => {
-          console.log("Connected to MQTT broker as: " + clientId);
-          document.getElementById("status").textContent = "Terhubung";
-          document.getElementById("status").style.color = "green";
-      
-          client.subscribe("sensor/suhu", { qos: 0 });
-          client.subscribe("sensor/kelembaban", { qos: 0 });
-        });
-      
-        client.on("message", (topic, message) => {
-          const payload = message.toString();
-          console.log("Received Message: " + payload + " on topic: " + topic);
-      
-          if (topic === "sensor/suhu") {
-            document.getElementById("suhu").textContent =
-              "Suhu: " + payload + " C";
-          } else if (topic === "sensor/kelembaban") {
-            document.getElementById("kelembaban").textContent =
-              "Kelembaban: " + payload + " %";
-          }
-        });
-      
-        client.on("close", () => {
-          console.log("Disconnected from MQTT broker");
-          document.getElementById("status").textContent = "Terputus";
-          document.getElementById("status").style.color = "red";
-        });
-      
-        // Kontrol lampu
-        document.getElementById("nyala").addEventListener("click", () => {
-          client.publish("sensor/led", "nyala", { qos: 0, retain: true });
-          console.log("Lampu dinyalakan");
-        });
-      
-        document.getElementById("mati").addEventListener("click", () => {
-          client.publish("sensor/led", "mati", { qos: 0, retain: true });
-          console.log("Lampu dimatikan");
-        });
-      </script>      
+    <script>
+      const clientId = "client-" + Math.random().toString(16).substr(2, 8);
+      const host = "wss://sfl-official.cloud.shiftr.io:443";
+      const options = {
+        keepalive: 60,
+        clientId,
+        username: "sfl-official",
+        password: "eDeHBopIdCqPWslY",
+        protocolId: "MQTT",
+        protocolVersion: 4,
+        clean: true,
+        reconnectPeriod: 1000,
+        connectTimeout: 30 * 1000,
+        will: {
+          topic: "WillMsg",
+          payload: "Connection Closed abnormally..!",
+          qos: 0,
+          retain: false,
+        },
+        rejectUnauthorized: false,
+      };
+
+      // Menghubungkan ke MQTT Broker
+      console.log("Connecting to MQTT client");
+      const client = mqtt.connect(host, options);
+
+      client.on("error", (err) => {
+        console.log("Connection error: ", err);
+        client.end();
+      });
+
+      client.on("connect", () => {
+        console.log("Connected to MQTT broker as: " + clientId);
+        document.getElementById("status").textContent = "Terhubung";
+        document.getElementById("status").style.color = "green";
+
+        client.subscribe("sensor/suhu", { qos: 0 });
+        client.subscribe("sensor/kelembaban", { qos: 0 });
+      });
+
+      client.on("message", (topic, message) => {
+        const payload = message.toString();
+        console.log("Received Message: " + payload + " on topic: " + topic);
+
+        if (topic === "sensor/suhu") {
+          document.getElementById("suhu").textContent =
+            "Suhu: " + payload + " C";
+        } else if (topic === "sensor/kelembaban") {
+          document.getElementById("kelembaban").textContent =
+            "Kelembaban: " + payload + " %";
+        }
+      });
+
+      client.on("close", () => {
+        console.log("Disconnected from MQTT broker");
+        document.getElementById("status").textContent = "Terputus";
+        document.getElementById("status").style.color = "red";
+      });
+
+      // Kontrol lampu
+      document.getElementById("nyala").addEventListener("click", () => {
+        client.publish("sensor/led", "nyala", { qos: 0, retain: true });
+        console.log("Lampu dinyalakan");
+      });
+
+      document.getElementById("mati").addEventListener("click", () => {
+        client.publish("sensor/led", "mati", { qos: 0, retain: true });
+        console.log("Lampu dimatikan");
+      });
+    </script>
   </body>
 </html>
